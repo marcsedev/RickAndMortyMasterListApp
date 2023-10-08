@@ -9,7 +9,7 @@ data class CharacterData(
     val gender: String,
     val originData: OriginData?,
     val locationData: LocationData?,
-    val image: String,
+    val image: String?,
     val episode: List<String>?,
     val url: String,
     val created: String

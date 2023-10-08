@@ -88,6 +88,8 @@ dependencies {
 // Hilt
     implementation("com.google.dagger:hilt-android:2.28.1-alpha")
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel:2.6.2")
+    implementation ("androidx.lifecycle:lifecycle-livedata:2.6.2")
 
 // Room
     val room_version = "2.2.5"
@@ -100,7 +102,10 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
 // Glide
-    implementation("com.github.bumptech.glide:glide:4.11.0")
+  //  implementation("com.github.bumptech.glide:glide:4.11.0")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 // Timber
     implementation("com.jakewharton.timber:timber:4.7.1")

@@ -1,5 +1,6 @@
 package com.marcsedev.rickandmortymasterlistapp.ui.list.masterList
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,17 +19,44 @@ class MasterListViewModel : ViewModel() {
     private val _charactersList = MutableLiveData<List<CharacterData>>()
     val charactersList: LiveData<List<CharacterData>> = _charactersList
 
-    fun getCharactersList() {
+    private val _character = MutableLiveData<CharacterData>()
+    val character: LiveData<CharacterData> = _character
+
+    init {
+        getCharacter()
+        getCharactersList()
+    }
+
+    private fun getCharactersList() {
         viewModelScope.launch {
             try {
-                val characters = repository.getCharactersList()
-                _charactersList.value = characters
+                val response = repository.getCharactersList()
+                _charactersList.value = response.results
+                response.results.forEach {
+                    Log.e("characters", it.toString())
+                }
+            } catch (e: Exception) {
+                Log.e("characters", "Error fetching characters: ${e.message}")
+                // Handle the error according to your needs
+            }
+        }
+    }
+
+
+
+
+
+    private fun getCharacter() {
+        viewModelScope.launch {
+            try {
+                val character = repository.getCharacter(2)
+                _character.value = character
+                Log.e("character", "$character")
             } catch (e: Exception) {
                 // Handle error
             }
         }
     }
-
 }
 
 /*
