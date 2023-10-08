@@ -2,6 +2,7 @@ package com.marcsedev.rickandmortymasterlistapp.ui.list.masterList
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -61,6 +62,7 @@ fun MasterListScreen(
                 },
             )
         },
+        containerColor = Color.Black
     ) { padding ->
         Column(
             modifier = Modifier
@@ -80,13 +82,15 @@ fun MasterListScreen(
     }
 }
 
-
 @Composable
 fun CharacterItemList(/*item: Item*/ name: String, species: String, onOpenDetail: () -> Unit) {
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .padding(8.dp)
+            .size(180.dp, 200.dp)
+            .border(1.dp, Color.Magenta, shape = RoundedCornerShape(16.dp))
+
     ) {
         Column(
             modifier = Modifier
@@ -124,6 +128,7 @@ fun CharacterItemList(/*item: Item*/ name: String, species: String, onOpenDetail
         }
     }
 }
+
 
 @Preview
 @Composable
