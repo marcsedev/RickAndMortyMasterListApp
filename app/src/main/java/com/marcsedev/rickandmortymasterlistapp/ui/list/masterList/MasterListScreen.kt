@@ -3,12 +3,15 @@ package com.marcsedev.rickandmortymasterlistapp.ui.list.masterList
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -28,10 +31,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,6 +87,9 @@ fun MasterListScreen(
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 150.dp),
                 contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+
             ) {
                 items(charactersList) { character ->
                     CharacterItemList(
@@ -99,18 +107,16 @@ fun CharacterItemList(character: CharacterData, onOpenDetail: () -> Unit) {
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
-            .padding(8.dp)
             .size(180.dp, 200.dp)
             .border(1.dp, Color.Magenta, shape = RoundedCornerShape(16.dp))
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.DarkGray)
-                .padding(16.dp),
+                .background(Color.DarkGray),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Carga de la imagen con Glide
+            Spacer(modifier = Modifier.height(16.dp))
             character.image?.let { imageUrl ->
                 Image(
                     painter = rememberAsyncImagePainter(imageUrl),
@@ -120,40 +126,113 @@ fun CharacterItemList(character: CharacterData, onOpenDetail: () -> Unit) {
                         .size(100.dp)
                         .fillMaxWidth()
                         .clip(CircleShape)
-                        .background(Color.LightGray),
+                        .background(Color.LightGray)
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Column(
+            Card(
                 modifier = Modifier
-                    .background(Color.White)
+                    .background(Color.Transparent)
+                    .shadow(8.dp),
+                shape = RoundedCornerShape(16.dp),
             ) {
-                Text(
-                    text = character.name,
-                    modifier = Modifier.align(CenterHorizontally),
-                    fontSize = 14.sp
-                )
-                Text(
-                    text = character.species,
-                    modifier = Modifier.align(CenterHorizontally),
-                    fontSize = 14.sp
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = character.name,
+                        modifier = Modifier.align(CenterHorizontally),
+                        fontSize = 12.sp
+                    )
+                    Text(
+                        text = character.species,
+                        modifier = Modifier.align(CenterHorizontally),
+                        fontSize = 12.sp
+                    )
+                }
             }
         }
     }
 }
 
-
 @Preview
 @Composable
 fun MasterListScreenPreview() {
     RickAndMortyMasterListAppTheme {
-        MasterListScreen()
+        val sampleCharacters = listOf(
+            CharacterData(
+                id = 1,
+                name = "Rick Sanchez",
+                status = "Alive",
+                species = "Human",
+                type = "Scientist",
+                gender = "Male",
+                originData = null,
+                locationData = null,
+                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                episode = listOf("S01E01", "S01E02"),
+                url = "https://example.com/rick",
+                created = "2021-10-09T12:00:00Z"
+            ),
+            CharacterData(
+                id = 2,
+                name = "Morty Smith",
+                status = "Alive",
+                species = "Human",
+                type = "Sidekick",
+                gender = "Male",
+                originData = null,
+                locationData = null,
+                image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
+                episode = listOf("S01E01", "S01E02"),
+                url = "https://example.com/morty",
+                created = "2021-10-09T12:00:00Z"
+            ),
+            CharacterData(
+                id = 1,
+                name = "Rick Sanchez",
+                status = "Alive",
+                species = "Human",
+                type = "Scientist",
+                gender = "Male",
+                originData = null,
+                locationData = null,
+                image = "https://rickandmortyapi.com/api/character/avatar/3.jpeg",
+                episode = listOf("S01E01", "S01E02"),
+                url = "https://example.com/rick",
+                created = "2021-10-09T12:00:00Z"
+            ),
+            CharacterData(
+                id = 2,
+                name = "Morty Smith",
+                status = "Alive",
+                species = "Human",
+                type = "Sidekick",
+                gender = "Male",
+                originData = null,
+                locationData = null,
+                image = "https://rickandmortyapi.com/api/character/avatar/4.jpeg",
+                episode = listOf("S01E01", "S01E02"),
+                url = "https://example.com/morty",
+                created = "2021-10-09T12:00:00Z"
+            )
+        )
+        MasterListScreen(viewModel = remember {
+            MasterListViewModel().apply {
+                setCharactersList(
+                    sampleCharacters
+                )
+            }
+        })
     }
 }
 
-@Preview
 @Composable
+@Preview
 fun CharacterItemListPreview() {
     val sampleCharacter = CharacterData(
         id = 1,
@@ -164,9 +243,9 @@ fun CharacterItemListPreview() {
         gender = "Male",
         originData = null,
         locationData = null,
-        image = "https://example.com/rick_image.jpg",
+        image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
         episode = listOf("S01E01", "S01E02"),
-        url = "https://example.com/rick",
+        url = "https://rickandmortyapi.com/api/character/1",
         created = "2021-10-09T12:00:00Z"
     )
 
