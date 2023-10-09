@@ -1,13 +1,14 @@
 package com.marcsedev.rickandmortymasterlistapp.data.respository
 
 import com.marcsedev.rickandmortymasterlistapp.data.network.model.characters.CharacterData
+import com.marcsedev.rickandmortymasterlistapp.data.network.model.response.CharacterResponse
 
 class CharacterRepository {
 
     private val characterService = RetrofitInstance.characterService
 
-    suspend fun getCharactersList(): List<CharacterData> {
-        return characterService.getCharactersList()
+    suspend fun getCharactersList(page: Int): CharacterResponse {
+        return characterService.getCharactersList(page)
     }
 
     suspend fun getCharacter(id: Int): CharacterData {
