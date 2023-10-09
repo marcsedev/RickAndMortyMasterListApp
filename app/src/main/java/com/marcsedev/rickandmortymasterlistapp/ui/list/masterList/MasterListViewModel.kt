@@ -31,17 +31,24 @@ class MasterListViewModel : ViewModel() {
         _charactersList.value = characterList
     }
 
+    private var currentPage = 1
+
+    fun loadMoreCharacters() {
+        currentPage++
+        getCharactersList()
+    }
+
     private fun getCharactersList() {
         viewModelScope.launch {
             try {
-                val response = repository.getCharactersList()
-                _charactersList.value = response.results
+                val response = repository.getCharactersList(currentPage)
+                val newList = _charactersList.value.orEmpty() + response.results
+                _charactersList.value = newList
                 response.results.forEach {
                     Log.e("characters", it.toString())
                 }
             } catch (e: Exception) {
-                Log.e("characters", "Error fetching characters: ${e.message}")
-                // Handle the error according to your needs
+                Log.e("characters", "Error al obtener personajes: ${e.message}")
             }
         }
     }

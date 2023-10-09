@@ -7,8 +7,8 @@ class CharacterRepository {
 
     private val characterService = RetrofitInstance.characterService
 
-    suspend fun getCharactersList(): CharacterResponse {
-        return characterService.getCharactersList()
+    suspend fun getCharactersList(page: Int): CharacterResponse {
+        return characterService.getCharactersList(page)
     }
 
     suspend fun getCharacter(id: Int): CharacterData {
