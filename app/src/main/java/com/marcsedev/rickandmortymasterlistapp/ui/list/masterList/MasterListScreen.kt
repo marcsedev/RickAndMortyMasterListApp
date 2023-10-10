@@ -3,20 +3,18 @@ package com.marcsedev.rickandmortymasterlistapp.ui.list.masterList
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,7 +56,6 @@ fun MasterListScreen(
 
     //val masterListViewModel: MasterListViewModel = viewModel()
     //val charactersList by masterListViewModel.charactersList.observeAsState(emptyList())
-    val character by viewModel.character.observeAsState()
 
     Scaffold(
         topBar = {
@@ -83,7 +79,7 @@ fun MasterListScreen(
             modifier = Modifier
                 .padding(top = padding.calculateTopPadding())
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = CenterHorizontally
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 150.dp),
@@ -96,6 +92,7 @@ fun MasterListScreen(
                     CharacterItemList(
                         character = character,
                         onOpenDetail = {
+                            character.id
                         }
                     )
                     if (index == charactersList.size - 1) {
@@ -108,18 +105,21 @@ fun MasterListScreen(
 }
 
 @Composable
-fun CharacterItemList(character: CharacterData, onOpenDetail: () -> Unit) {
+fun CharacterItemList(character: CharacterData, onOpenDetail: (id: Int) -> Unit) {
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .size(180.dp, 200.dp)
             .border(1.dp, Color.Magenta, shape = RoundedCornerShape(16.dp))
+            .clickable {
+                onOpenDetail(character.id)
+            }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.DarkGray),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             character.image?.let { imageUrl ->
@@ -142,7 +142,7 @@ fun CharacterItemList(character: CharacterData, onOpenDetail: () -> Unit) {
                 shape = RoundedCornerShape(16.dp),
             ) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    horizontalAlignment = CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxSize()
