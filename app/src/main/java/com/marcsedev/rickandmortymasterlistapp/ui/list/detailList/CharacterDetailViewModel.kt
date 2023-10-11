@@ -16,16 +16,18 @@ class CharacterDetailViewModel : ViewModel() {
     private val _character = MutableLiveData<CharacterData>()
     val character: LiveData<CharacterData> = _character
 
+    private val _characterId = MutableLiveData<Int>()
+    val characterId: LiveData<Int> = _characterId
+
     init {
-        getCharacter(id = 2)
+        character.value?.let { getCharacterById(id = it.id) }
     }
 
-    private fun getCharacter(id: Int) {
+    fun getCharacterById(id: Int) {
         viewModelScope.launch {
             try {
-                val character = repository.getCharacter(2)
+                val character = repository.getCharacter(id)
                 _character.value = character
-                Log.e("character", "$character")
             } catch (e: Exception) {
                 // Handle error
             }
