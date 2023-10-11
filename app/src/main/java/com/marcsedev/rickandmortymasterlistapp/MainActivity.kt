@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.marcsedev.rickandmortymasterlistapp.ui.list.masterList.MasterListScreen
+import com.marcsedev.rickandmortymasterlistapp.ui.navigation.AppNavigation
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MasterListScreen(/*onBackClick = { /*TODO*/ }, onOpenCharacter = { /*TODO*/ }*/)
+                    AppNavigation()
                 }
             }
         }
@@ -42,6 +43,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     RickAndMortyMasterListAppTheme {
-        Greeting("Android")
+       AppNavigation()
     }
 }

@@ -1,22 +1,22 @@
+@file:Suppress("UNUSED_EXPRESSION")
+
 package com.marcsedev.rickandmortymasterlistapp.ui.list.masterList
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,7 +33,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,37 +43,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.marcsedev.rickandmortymasterlistapp.data.network.model.characters.CharacterData
+import com.marcsedev.rickandmortymasterlistapp.ui.navigation.AppScreens
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MasterListScreen(
-    viewModel: MasterListViewModel = viewModel()
-    //onBackClick: () -> Unit,
-    //onOpenCharacter: (categoryId: Int, title: String) -> Unit,
+    viewModel: MasterListViewModel = viewModel(),
+    onOpenDetailCharacter: (id: Int) -> Unit,
+    navController: NavController
 ) {
     val charactersList by viewModel.charactersList.observeAsState(emptyList())
-
-    //val masterListViewModel: MasterListViewModel = viewModel()
-    //val charactersList by masterListViewModel.charactersList.observeAsState(emptyList())
-    val character by viewModel.character.observeAsState()
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text("Rick and Morty Character List")
-                },
-                navigationIcon = {
-                    IconButton(onClick = { }) {
-                        Icon(
-                            imageVector = Icons.Filled.Close,
-                            contentDescription = null
-                        )
-                    }
-                },
+                }
             )
         },
         containerColor = Color.Black
@@ -83,7 +73,7 @@ fun MasterListScreen(
             modifier = Modifier
                 .padding(top = padding.calculateTopPadding())
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = CenterHorizontally
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 150.dp),
@@ -95,8 +85,10 @@ fun MasterListScreen(
                 itemsIndexed(charactersList) { index, character ->
                     CharacterItemList(
                         character = character,
-                        onOpenDetail = {
-                        }
+                        onOpenDetailCharacter = {
+                            character.id
+                        },
+                        navController = navController
                     )
                     if (index == charactersList.size - 1) {
                         viewModel.loadMoreCharacters()
@@ -108,18 +100,26 @@ fun MasterListScreen(
 }
 
 @Composable
-fun CharacterItemList(character: CharacterData, onOpenDetail: () -> Unit) {
+fun CharacterItemList(
+    character: CharacterData,
+    onOpenDetailCharacter: (id: Int) -> Unit,
+    navController: NavController
+) {
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .size(180.dp, 200.dp)
             .border(1.dp, Color.Magenta, shape = RoundedCornerShape(16.dp))
+            .clickable {
+                //onOpenDetailCharacter(character.id)
+                navController.navigate(route = AppScreens.CharacterDetailScreen.route + "/${character.id}")
+            }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.DarkGray),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             character.image?.let { imageUrl ->
@@ -142,7 +142,7 @@ fun CharacterItemList(character: CharacterData, onOpenDetail: () -> Unit) {
                 shape = RoundedCornerShape(16.dp),
             ) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    horizontalAlignment = CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxSize()
@@ -168,6 +168,7 @@ fun CharacterItemList(character: CharacterData, onOpenDetail: () -> Unit) {
 @Composable
 fun MasterListScreenPreview() {
     RickAndMortyMasterListAppTheme {
+        val navController = rememberNavController()
         val sampleCharacters = listOf(
             CharacterData(
                 id = 1,
@@ -226,19 +227,24 @@ fun MasterListScreenPreview() {
                 created = "2021-10-09T12:00:00Z"
             )
         )
-        MasterListScreen(viewModel = remember {
-            MasterListViewModel().apply {
-                setCharactersList(
-                    sampleCharacters
-                )
-            }
-        })
+        MasterListScreen(
+            viewModel = remember {
+                MasterListViewModel().apply {
+                    setCharactersList(
+                        sampleCharacters
+                    )
+                }
+            },
+            onOpenDetailCharacter = {},
+            navController = navController
+        )
     }
 }
 
 @Composable
 @Preview
 fun CharacterItemListPreview() {
+    val navController = rememberNavController()
     val sampleCharacter = CharacterData(
         id = 1,
         name = "Rick Sanchez",
@@ -255,6 +261,10 @@ fun CharacterItemListPreview() {
     )
 
     RickAndMortyMasterListAppTheme {
-        CharacterItemList(character = sampleCharacter) {}
+        CharacterItemList(
+            character = sampleCharacter,
+            onOpenDetailCharacter = {},
+            navController = navController
+        )
     }
 }
