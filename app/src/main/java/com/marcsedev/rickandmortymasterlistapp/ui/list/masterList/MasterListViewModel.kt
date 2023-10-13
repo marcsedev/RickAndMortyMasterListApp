@@ -23,7 +23,6 @@ class MasterListViewModel : ViewModel() {
     val character: LiveData<CharacterData> = _character
 
     init {
-        getCharacter()
         getCharactersList()
     }
 
@@ -49,18 +48,6 @@ class MasterListViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 Log.e("characters", "Error al obtener personajes: ${e.message}")
-            }
-        }
-    }
-
-    private fun getCharacter() {
-        viewModelScope.launch {
-            try {
-                val character = repository.getCharacter(2)
-                _character.value = character
-                Log.e("character", "$character")
-            } catch (e: Exception) {
-                // Handle error
             }
         }
     }

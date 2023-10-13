@@ -4,8 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,6 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,14 +35,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
+import com.marcsedev.rickandmortymasterlistapp.R
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,87 +68,97 @@ fun CharacterDetailScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(character?.name ?: "_name")
+                    Text(
+                        text = character?.name ?: "_name",
+                        color = Color.White
+                    )
                 },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = Color.Black
+                ),
                 navigationIcon = {
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint = Color.White
                         )
                     }
                 },
             )
         },
-        containerColor = Color.Black
     ) { padding ->
-        Column(
-            horizontalAlignment = CenterHorizontally
+        Box(
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = padding.calculateTopPadding())
-                    .padding(16.dp)
-                    .border(1.dp, Color.Magenta, shape = RoundedCornerShape(16.dp))
+            Image(
+                painter = painterResource(R.drawable.cielo_estrellado),
+                contentDescription = null,
+                contentScale = ContentScale.FillHeight,
+            )
+            Column(
+                horizontalAlignment = CenterHorizontally
             ) {
-                Column(
+                Card(
+                    shape = RoundedCornerShape(16.dp),
                     modifier = Modifier
-                        .background(Color.DarkGray),
-                    horizontalAlignment = CenterHorizontally
+                        .fillMaxWidth()
+                        .padding(top = padding.calculateTopPadding())
+                        .padding(16.dp)
+                        .border(1.dp, Color.Magenta, shape = RoundedCornerShape(16.dp))
                 ) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Image(
-                        painter = rememberAsyncImagePainter(character?.image),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(250.dp)
-                            .clip(CircleShape)
-                            .background(Color.LightGray)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Card(
-                        modifier = Modifier
-                            .background(Color.Transparent)
-                            .shadow(8.dp),
-                        shape = RoundedCornerShape(16.dp),
+                    Column(
+                        horizontalAlignment = CenterHorizontally
                     ) {
-                        Column(
-                            horizontalAlignment = CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
+                        Image(
+                            painter = rememberAsyncImagePainter(character?.image),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
+                                .aspectRatio(1f)
+                                .clip(RoundedCornerShape(16.dp))
+                        )
+                        Card(
+                            modifier = Modifier
+                                .shadow(16.dp),
+                            shape = RoundedCornerShape(16.dp),
                         ) {
-                            Text(
-                                text = id.toString(),
-                                modifier = Modifier.align(CenterHorizontally),
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = character?.name ?: "_name",
-                                modifier = Modifier.align(CenterHorizontally),
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = character?.species ?: "_species",
-                                modifier = Modifier.align(CenterHorizontally),
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = character?.status ?: "_status",
-                                modifier = Modifier.align(CenterHorizontally),
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = character?.gender ?: "_gender",
-                                modifier = Modifier.align(CenterHorizontally),
-                                fontSize = 12.sp
-                            )
+                            Column(
+                                horizontalAlignment = CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                            ) {
+                                Text(
+                                    text = id.toString(),
+                                    modifier = Modifier.align(CenterHorizontally),
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    text = character?.name ?: "_name",
+                                    modifier = Modifier.align(CenterHorizontally),
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    text = character?.species ?: "_species",
+                                    modifier = Modifier.align(CenterHorizontally),
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    text = character?.status ?: "_status",
+                                    modifier = Modifier.align(CenterHorizontally),
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    text = character?.gender ?: "_gender",
+                                    modifier = Modifier.align(CenterHorizontally),
+                                    fontSize = 12.sp
+                                )
+                            }
                         }
                     }
                 }

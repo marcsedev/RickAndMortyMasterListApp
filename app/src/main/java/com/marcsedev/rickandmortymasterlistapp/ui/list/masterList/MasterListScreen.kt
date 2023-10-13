@@ -1,5 +1,3 @@
-@file:Suppress("UNUSED_EXPRESSION")
-
 package com.marcsedev.rickandmortymasterlistapp.ui.list.masterList
 
 import androidx.compose.foundation.Image
@@ -21,12 +19,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -47,11 +42,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.ImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.marcsedev.rickandmortymasterlistapp.R
 import com.marcsedev.rickandmortymasterlistapp.data.network.model.characters.CharacterData
 import com.marcsedev.rickandmortymasterlistapp.ui.navigation.AppScreens
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.text.style.TextOverflow
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,40 +58,54 @@ fun MasterListScreen(
     navController: NavController
 ) {
     val charactersList by viewModel.charactersList.observeAsState(emptyList())
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Rick and Morty Character List")
-                }
+                    Text(
+                        text = "Rick and Morty Character List",
+                        color = Color.White // Puedes ajustar el color aquí
+                    )
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = Color.Black
+                )
             )
         },
         containerColor = Color.Black
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(top = padding.calculateTopPadding())
-                .padding(16.dp),
-            horizontalAlignment = CenterHorizontally
+        Box(
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 150.dp),
-                contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-
+            Image(
+                painter = painterResource(R.drawable.cielo_estrellado),
+                contentDescription = null,
+                contentScale = ContentScale.FillHeight,
+            )
+            Column(
+                modifier = Modifier
+                    .padding(top = padding.calculateTopPadding())
+                    .padding(16.dp),
+                horizontalAlignment = CenterHorizontally
             ) {
-                itemsIndexed(charactersList) { index, character ->
-                    CharacterItemList(
-                        character = character,
-                        onOpenDetailCharacter = {
-                            character.id
-                        },
-                        navController = navController
-                    )
-                    if (index == charactersList.size - 1) {
-                        viewModel.loadMoreCharacters()
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+
+                ) {
+                    itemsIndexed(charactersList) { index, character ->
+                        CharacterItemList(
+                            character = character,
+                            onOpenDetailCharacter = {
+                                character.id
+                            },
+                            navController = navController
+                        )
+                        if (index == charactersList.size - 1) {
+                            viewModel.loadMoreCharacters()
+                        }
                     }
                 }
             }
@@ -109,20 +119,25 @@ fun CharacterItemList(
     onOpenDetailCharacter: (id: Int) -> Unit,
     navController: NavController
 ) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
+    Box(
         modifier = Modifier
-            .size(180.dp, 200.dp)
+            .size(180.dp, 210.dp)
             .border(1.dp, Color.Magenta, shape = RoundedCornerShape(16.dp))
             .clickable {
                 //onOpenDetailCharacter(character.id)
                 navController.navigate(route = AppScreens.CharacterDetailScreen.route + "/${character.id}")
             }
     ) {
+        Image(
+            painter = painterResource(R.drawable.cielo_estrellado),
+            contentDescription = null,
+            contentScale = ContentScale.FillHeight,
+            modifier = Modifier.fillMaxSize()
+        )
+
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.DarkGray),
+                .fillMaxSize(),
             horizontalAlignment = CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -140,9 +155,7 @@ fun CharacterItemList(
             }
             Spacer(modifier = Modifier.height(8.dp))
             Card(
-                modifier = Modifier
-                    .background(Color.Transparent)
-                    .shadow(8.dp),
+                modifier = Modifier.shadow(8.dp),
                 shape = RoundedCornerShape(16.dp),
             ) {
                 Column(
@@ -155,18 +168,23 @@ fun CharacterItemList(
                     Text(
                         text = character.name,
                         modifier = Modifier.align(CenterHorizontally),
-                        fontSize = 12.sp
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = character.species,
                         modifier = Modifier.align(CenterHorizontally),
-                        fontSize = 12.sp
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
         }
     }
 }
+
 
 @Preview
 @Composable
