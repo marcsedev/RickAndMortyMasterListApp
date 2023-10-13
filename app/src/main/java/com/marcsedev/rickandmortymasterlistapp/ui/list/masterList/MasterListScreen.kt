@@ -46,7 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.marcsedev.rickandmortymasterlistapp.R
 import com.marcsedev.rickandmortymasterlistapp.data.network.model.characters.CharacterData
-import com.marcsedev.rickandmortymasterlistapp.ui.navigation.AppScreens
+import com.marcsedev.rickandmortymasterlistapp.navigation.AppScreens
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

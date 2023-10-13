@@ -73,9 +73,8 @@ dependencies {
     //Compose
     dependencies {
         val nav_version = "2.5.3"
-
         implementation("androidx.navigation:navigation-compose:$nav_version")
-        implementation ("androidx.compose.material3:material3:1.0.0-beta02")
+        implementation("androidx.compose.material3:material3:1.0.0-beta02")
 
     }
 
@@ -91,35 +90,34 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
-// Kotlin Coroutines
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version")
+    // Kotlin Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
 
-// Hilt
+    // Hilt
     implementation("com.google.dagger:hilt-android:2.28.1-alpha")
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel:2.6.2")
-    implementation ("androidx.lifecycle:lifecycle-livedata:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-livedata:2.6.2")
 
-// Room
+    // Room
     val room_version = "2.2.5"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
-// Navigation
+    // Navigation
     val nav_version = "2.3.0"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:2.5.0-alpha01")
 
-// Glide
-  //  implementation("com.github.bumptech.glide:glide:4.11.0")
-
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
-// Timber
+    // Timber
     implementation("com.jakewharton.timber:timber:4.7.1")
+
+    //SplashScreen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     testImplementation("junit:junit:4.13")
     androidTestImplementation("androidx.test.ext:junit:1.1.1")
