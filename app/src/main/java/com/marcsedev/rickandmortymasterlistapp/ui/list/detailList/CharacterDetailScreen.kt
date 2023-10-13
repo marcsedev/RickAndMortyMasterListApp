@@ -107,7 +107,8 @@ fun CharacterDetailScreen(
                         .fillMaxWidth()
                         .padding(top = padding.calculateTopPadding())
                         .padding(16.dp)
-                        .border(1.dp, Color.Magenta, shape = RoundedCornerShape(16.dp))
+                        .shadow(elevation = 16.dp)
+                        .border(1.dp, Color.White, shape = RoundedCornerShape(16.dp))
                 ) {
                     Column(
                         horizontalAlignment = CenterHorizontally
@@ -123,7 +124,8 @@ fun CharacterDetailScreen(
                         )
                         Card(
                             modifier = Modifier
-                                .shadow(16.dp),
+                                .shadow(16.dp)
+                                .shadow(elevation = 16.dp),
                             shape = RoundedCornerShape(16.dp),
                         ) {
                             Column(
@@ -136,27 +138,27 @@ fun CharacterDetailScreen(
                                 Text(
                                     text = id.toString(),
                                     modifier = Modifier.align(CenterHorizontally),
-                                    fontSize = 12.sp
+                                    fontSize = 16.sp
                                 )
                                 Text(
                                     text = character?.name ?: "_name",
                                     modifier = Modifier.align(CenterHorizontally),
-                                    fontSize = 12.sp
+                                    fontSize = 16.sp
                                 )
                                 Text(
                                     text = character?.species ?: "_species",
                                     modifier = Modifier.align(CenterHorizontally),
-                                    fontSize = 12.sp
+                                    fontSize = 16.sp
                                 )
                                 Text(
                                     text = character?.status ?: "_status",
                                     modifier = Modifier.align(CenterHorizontally),
-                                    fontSize = 12.sp
+                                    fontSize = 16.sp
                                 )
                                 Text(
                                     text = character?.gender ?: "_gender",
                                     modifier = Modifier.align(CenterHorizontally),
-                                    fontSize = 12.sp
+                                    fontSize = 16.sp
                                 )
                             }
                         }
@@ -166,7 +168,6 @@ fun CharacterDetailScreen(
         }
     }
 }
-
 
 @Preview
 @Composable
