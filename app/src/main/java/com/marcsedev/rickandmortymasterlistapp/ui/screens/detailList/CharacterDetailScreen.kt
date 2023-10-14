@@ -1,4 +1,4 @@
-package com.marcsedev.rickandmortymasterlistapp.ui.screens.list.detailList
+package com.marcsedev.rickandmortymasterlistapp.ui.screens.detailList
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

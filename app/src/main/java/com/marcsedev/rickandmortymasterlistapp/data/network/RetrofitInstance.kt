@@ -1,6 +1,5 @@
-package com.marcsedev.rickandmortymasterlistapp.data.respository
+package com.marcsedev.rickandmortymasterlistapp.data.network
 
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -25,7 +24,7 @@ object RetrofitInstance {
             .build()
     }
 
-    val characterService: CharacterService by lazy {
-        retrofit.create(CharacterService::class.java)
+    val characterClient: CharacterClient by lazy {
+        retrofit.create(CharacterClient::class.java)
     }
 }

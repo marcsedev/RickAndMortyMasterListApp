@@ -1,4 +1,4 @@
-package com.marcsedev.rickandmortymasterlistapp.data.network.model.characters
+package com.marcsedev.rickandmortymasterlistapp.data.model.characters
 
 data class Result(
     val created: String,

@@ -1,4 +1,4 @@
-package com.marcsedev.rickandmortymasterlistapp.ui.screens.list.masterList
+package com.marcsedev.rickandmortymasterlistapp.ui.screens.masterList
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +47,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.marcsedev.rickandmortymasterlistapp.R
-import com.marcsedev.rickandmortymasterlistapp.data.network.model.characters.CharacterData
+import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
 import com.marcsedev.rickandmortymasterlistapp.navigation.AppScreens
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
@@ -57,6 +59,7 @@ fun MasterListScreen(
     navController: NavController
 ) {
     val charactersList by masterListViewModel.charactersList.observeAsState(emptyList())
+    val isLoading by masterListViewModel.isLoading.observeAsState(false)
 
     Scaffold(
         topBar = {
@@ -72,38 +75,50 @@ fun MasterListScreen(
                 )
             )
         },
-        containerColor = Color.Black
     ) { padding ->
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Image(
-                painter = painterResource(R.drawable.cielo_estrellado),
-                contentDescription = null,
-                contentScale = ContentScale.FillHeight,
-            )
-            Column(
+        if (isLoading) {
+            Box(
                 modifier = Modifier
-                    .padding(top = padding.calculateTopPadding())
-                    .padding(16.dp),
-                horizontalAlignment = CenterHorizontally
+                    .fillMaxSize()
+                    .background(Color.Black)
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                CircularProgressIndicator(
+                    Modifier.align(Center)
+                )
+            }
+
+        } else {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.cielo_estrellado),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillHeight,
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(top = padding.calculateTopPadding())
+                        .padding(16.dp),
+                    horizontalAlignment = CenterHorizontally
                 ) {
-                    itemsIndexed(charactersList) { index, character ->
-                        CharacterItemList(
-                            character = character,
-                            onOpenDetailCharacter = {
-                                character.id
-                            },
-                            navController = navController
-                        )
-                        if (index == charactersList.size - 1) {
-                            masterListViewModel.loadMoreCharacters()
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        itemsIndexed(charactersList) { index, character ->
+                            CharacterItemList(
+                                character = character,
+                                onOpenDetailCharacter = {
+                                    character.id
+                                },
+                                navController = navController
+                            )
+                            if (index == charactersList.size - 1) {
+                                masterListViewModel.loadMoreCharacters()
+                            }
                         }
                     }
                 }
@@ -184,11 +199,11 @@ fun CharacterItemList(
     }
 }
 
+
 @Preview
 @Composable
 fun MasterListScreenPreview() {
     RickAndMortyMasterListAppTheme {
-        val navController = rememberNavController()
         val sampleCharacters = listOf(
             CharacterData(
                 id = 1,
@@ -256,7 +271,7 @@ fun MasterListScreenPreview() {
                 }
             },
             onOpenDetailCharacter = {},
-            navController = navController
+            navController = rememberNavController()
         )
     }
 }
@@ -264,27 +279,24 @@ fun MasterListScreenPreview() {
 @Composable
 @Preview
 fun CharacterItemListPreview() {
-    val navController = rememberNavController()
-    val sampleCharacter = CharacterData(
-        id = 1,
-        name = "Rick Sanchez",
-        status = "Alive",
-        species = "Human",
-        type = "Scientist",
-        gender = "Male",
-        originData = null,
-        locationData = null,
-        image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-        episode = listOf("S01E01", "S01E02"),
-        url = "https://rickandmortyapi.com/api/character/1",
-        created = "2021-10-09T12:00:00Z"
-    )
-
     RickAndMortyMasterListAppTheme {
         CharacterItemList(
-            character = sampleCharacter,
+            character = CharacterData(
+                id = 1,
+                name = "Rick Sanchez",
+                status = "Alive",
+                species = "Human",
+                type = "Scientist",
+                gender = "Male",
+                originData = null,
+                locationData = null,
+                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                episode = listOf("S01E01", "S01E02"),
+                url = "https://rickandmortyapi.com/api/character/1",
+                created = "2021-10-09T12:00:00Z"
+            ),
             onOpenDetailCharacter = {},
-            navController = navController
+            navController = rememberNavController()
         )
     }
 }
