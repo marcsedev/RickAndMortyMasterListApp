@@ -1,5 +1,6 @@
 package com.marcsedev.rickandmortymasterlistapp.ui.screens.masterList
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -80,10 +81,16 @@ fun MasterListScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black)
             ) {
+                Image(
+                    painter = painterResource(R.drawable.cielo_estrellado),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillHeight,
+                )
                 CircularProgressIndicator(
-                    Modifier.align(Center)
+                    Modifier
+                        .align(Center)
+                        .animateContentSize()
                 )
             }
 

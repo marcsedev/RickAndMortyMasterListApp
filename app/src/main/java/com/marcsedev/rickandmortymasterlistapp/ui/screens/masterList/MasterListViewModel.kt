@@ -19,7 +19,7 @@ class MasterListViewModel : ViewModel() {
     val charactersList: LiveData<List<CharacterData>> = _charactersList
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    var isLoading: LiveData<Boolean> = _isLoading
 
     private var currentPage = 1
 
