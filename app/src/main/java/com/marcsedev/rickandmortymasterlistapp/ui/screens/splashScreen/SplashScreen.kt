@@ -1,4 +1,4 @@
-package com.marcsedev.rickandmortymasterlistapp.ui.splashScreen
+package com.marcsedev.rickandmortymasterlistapp.ui.screens.splashScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

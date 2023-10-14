@@ -1,4 +1,4 @@
-package com.marcsedev.rickandmortymasterlistapp.ui.list.masterList
+package com.marcsedev.rickandmortymasterlistapp.ui.screens.list.masterList
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -52,18 +52,19 @@ import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MasterListScreen(
-    viewModel: MasterListViewModel = viewModel(),
-    onOpenDetailCharacter: (id: Int) -> Unit,
+    masterListViewModel: MasterListViewModel = viewModel(),
+    onOpenDetailCharacter: (Int) -> Unit,
     navController: NavController
 ) {
-    val charactersList by viewModel.charactersList.observeAsState(emptyList())
+    val charactersList by masterListViewModel.charactersList.observeAsState(emptyList())
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Rick and Morty Character List",
-                        color = Color.White // Puedes ajustar el color aquí
+                        color = Color.White
                     )
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -92,7 +93,6 @@ fun MasterListScreen(
                     contentPadding = PaddingValues(8.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
-
                 ) {
                     itemsIndexed(charactersList) { index, character ->
                         CharacterItemList(
@@ -103,7 +103,7 @@ fun MasterListScreen(
                             navController = navController
                         )
                         if (index == charactersList.size - 1) {
-                            viewModel.loadMoreCharacters()
+                            masterListViewModel.loadMoreCharacters()
                         }
                     }
                 }
@@ -248,7 +248,7 @@ fun MasterListScreenPreview() {
             )
         )
         MasterListScreen(
-            viewModel = remember {
+            masterListViewModel = remember {
                 MasterListViewModel().apply {
                     setCharactersList(
                         sampleCharacters

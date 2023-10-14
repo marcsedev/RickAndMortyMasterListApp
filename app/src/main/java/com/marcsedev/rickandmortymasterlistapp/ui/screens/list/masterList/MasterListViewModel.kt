@@ -1,4 +1,4 @@
-package com.marcsedev.rickandmortymasterlistapp.ui.list.masterList
+package com.marcsedev.rickandmortymasterlistapp.ui.screens.list.masterList
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,9 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.marcsedev.rickandmortymasterlistapp.data.network.model.characters.CharacterData
 import com.marcsedev.rickandmortymasterlistapp.data.respository.CharacterRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MasterListViewModel : ViewModel() {
@@ -18,9 +15,6 @@ class MasterListViewModel : ViewModel() {
 
     private val _charactersList = MutableLiveData<List<CharacterData>>()
     val charactersList: LiveData<List<CharacterData>> = _charactersList
-
-    private val _character = MutableLiveData<CharacterData>()
-    val character: LiveData<CharacterData> = _character
 
     init {
         getCharactersList()
@@ -33,8 +27,10 @@ class MasterListViewModel : ViewModel() {
     private var currentPage = 1
 
     fun loadMoreCharacters() {
-        currentPage++
-        getCharactersList()
+       viewModelScope.launch {
+           currentPage++
+           getCharactersList()
+       }
     }
 
     private fun getCharactersList() {

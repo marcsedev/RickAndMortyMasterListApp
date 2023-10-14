@@ -1,4 +1,4 @@
-package com.marcsedev.rickandmortymasterlistapp.ui.list.detailList
+package com.marcsedev.rickandmortymasterlistapp.ui.screens.list.detailList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
