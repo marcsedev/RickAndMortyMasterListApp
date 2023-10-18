@@ -1,89 +1,170 @@
 package com.marcsedev.rickandmortymasterlistapp.ui.screens.masterList
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberAsyncImagePainter
 import com.marcsedev.rickandmortymasterlistapp.R
 import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
-import com.marcsedev.rickandmortymasterlistapp.navigation.AppScreens
+import com.marcsedev.rickandmortymasterlistapp.ui.components.CharacterItem
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MasterListScreen(
     masterListViewModel: MasterListViewModel = viewModel(),
     onOpenDetailCharacter: (Int) -> Unit,
-    navController: NavController
+    navController: NavController,
 ) {
+
+    data class NavigationItem(
+        val title: String,
+        val selectedIcon: ImageVector,
+        val unselectedIcon: ImageVector,
+    )
+
     val charactersList by masterListViewModel.charactersList.observeAsState(emptyList())
     val isLoading by masterListViewModel.isLoading.observeAsState(false)
+    val coroutineScope = rememberCoroutineScope()
+    val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    var selectedItemIndex by rememberSaveable {
+        mutableIntStateOf(0)
+    }
 
-    Scaffold(
-        topBar = { MyTopAppBar() },
-        bottomBar = { MyBottomNavigation() }
-    ) { padding ->
-       /* if (isLoading) {
-            Loading()
-        } else {*/
+    val items = listOf(
+        NavigationItem(
+            title = "Author",
+            selectedIcon = Icons.Filled.AccountCircle,
+            unselectedIcon = Icons.Outlined.AccountCircle,
+        ),
+        NavigationItem(
+            title = "Urgent",
+            selectedIcon = Icons.Filled.Info,
+            unselectedIcon = Icons.Outlined.Info,
+        ),
+        NavigationItem(
+            title = "Settings",
+            selectedIcon = Icons.Filled.Settings,
+            unselectedIcon = Icons.Outlined.Settings,
+        ),
+    )
+
+    ModalNavigationDrawer(
+        drawerContent = {
+            ModalDrawerSheet {
+                Column(
+                    modifier = Modifier.background(Color.DarkGray)
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.rick_morty_title),
+                        contentDescription = "_title",
+                        modifier = Modifier.padding(16.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    items.forEachIndexed { index, item ->
+                        NavigationDrawerItem(
+                            label = {
+                                Text(text = item.title)
+                            },
+                            selected = index == selectedItemIndex,
+                            onClick = {
+                                selectedItemIndex = index
+                                coroutineScope.launch {
+                                    drawerState.close()
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = if (index == selectedItemIndex) {
+                                        item.selectedIcon
+                                    } else item.unselectedIcon,
+                                    contentDescription = item.title
+                                )
+                            },
+                            modifier = Modifier
+                                .padding(NavigationDrawerItemDefaults.ItemPadding)
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "v1.0",
+                        modifier = Modifier.align(CenterHorizontally),
+                        color = Color.LightGray
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+
+        },
+        drawerState = drawerState,
+    ) {
+        Scaffold(
+            topBar = { MyTopAppBar(drawerState, coroutineScope) },
+            bottomBar = { MyBottomNavigation() }
+        ) { padding ->
+            /* if (isLoading) {
+                 Loading()
+             } else {*/
             Box(
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -95,7 +176,7 @@ fun MasterListScreen(
                 Column(
                     modifier = Modifier
                         .padding(top = padding.calculateTopPadding())
-                        .padding(16.dp),
+                        .padding(horizontal = 16.dp),
                     horizontalAlignment = CenterHorizontally
                 ) {
                     LazyVerticalGrid(
@@ -105,7 +186,7 @@ fun MasterListScreen(
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         itemsIndexed(charactersList) { index, character ->
-                            CharacterItemList(
+                            CharacterItem(
                                 character = character,
                                 onOpenDetailCharacter = {
                                     character.id
@@ -121,31 +202,12 @@ fun MasterListScreen(
             }
         }
     }
-//}
-
-@Composable
-fun Loading() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Image(
-            painter = painterResource(R.drawable.cielo_estrellado),
-            contentDescription = null,
-            contentScale = ContentScale.FillHeight,
-        )
-        CircularProgressIndicator(
-            Modifier
-                .align(Alignment.Center)
-                .animateContentSize()
-        )
-    }
-
 }
+//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar() {
+fun MyTopAppBar(drawerState: DrawerState, coroutineScope: CoroutineScope) {
     TopAppBar(
         title = {
             Text(
@@ -153,11 +215,13 @@ fun MyTopAppBar() {
                 color = Color.White
             )
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = Color.Black
-        ),
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                coroutineScope.launch {
+                    // Abre el cajón aquí
+                    drawerState.open()
+                }
+            }) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "",
@@ -173,8 +237,10 @@ fun MyTopAppBar() {
                     tint = Color.White
                 )
             }
-        }
-
+        },
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = Color.Black
+        ),
     )
 }
 
@@ -221,116 +287,12 @@ fun MyBottomNavigation() {
     }
 }
 
-@Composable
-fun CharacterItemList(
-    character: CharacterData,
-    onOpenDetailCharacter: (id: Int) -> Unit,
-    navController: NavController
-) {
-    Box(
-        modifier = Modifier
-            .size(180.dp, 210.dp)
-            .border(1.dp, Color.Transparent, shape = RoundedCornerShape(16.dp))
-            .clickable {
-                navController.navigate(route = AppScreens.CharacterDetailScreen.route + "/${character.id}")
-            }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            character.image?.let { imageUrl ->
-                Box(
-                    modifier = Modifier
-                        .shadow(elevation = 70.dp, shape = CircleShape)
-                ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(imageUrl),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(100.dp)
-                            .fillMaxSize()
-                            .clip(CircleShape)
-                            .shadow(elevation = 24.dp, shape = CircleShape)
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Card(
-                modifier = Modifier.shadow(8.dp),
-                shape = RoundedCornerShape(16.dp),
-            ) {
-                Column(
-                    horizontalAlignment = CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp)
-                ) {
-                    Text(
-                        text = character.name,
-                        modifier = Modifier.align(CenterHorizontally),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        //color = Color.Magenta,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Row(
-                        modifier = Modifier.align(CenterHorizontally),
-                    ) {
-                        when (character.gender) {
-                            "Female" -> {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.female_24px),
-                                    contentDescription = "",
-                                    tint = Color.Magenta,
-                                    modifier = Modifier.size(14.dp)
-                                )
-                            }
-                            "Male" -> {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.male_24px),
-                                    contentDescription = "",
-                                    tint = Color.Blue,
-                                    modifier = Modifier.size(14.dp)
-
-                                )
-                            }
-                            else -> {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.unknown_24px),
-                                    contentDescription = "",
-                                    tint = Color.Gray,
-                                    modifier = Modifier.size(14.dp)
-
-                                )
-                            }
-                        }
-                        Text(
-                            text = character.species,
-                            modifier = Modifier.align(CenterVertically),
-                            fontSize = 12.sp,
-                            color = Color.DarkGray,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-
-                }
-            }
-        }
-    }
-}
-
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun MasterListScreenPreview() {
     RickAndMortyMasterListAppTheme {
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val sampleCharacters = listOf(
             CharacterData(
                 id = 1,
@@ -398,32 +360,7 @@ fun MasterListScreenPreview() {
                 }
             },
             onOpenDetailCharacter = {},
-            navController = rememberNavController()
-        )
-    }
-}
-
-@Composable
-@Preview
-fun CharacterItemListPreview() {
-    RickAndMortyMasterListAppTheme {
-        CharacterItemList(
-            character = CharacterData(
-                id = 1,
-                name = "Rick Sanchez",
-                status = "Alive",
-                species = "Human",
-                type = "Scientist",
-                gender = "Male",
-                originData = null,
-                locationData = null,
-                image = R.drawable.rick_and_morty_logo.toString(),
-                episode = listOf("S01E01", "S01E02"),
-                url = "https://rickandmortyapi.com/api/character/1",
-                created = "2021-10-09T12:00:00Z"
-            ),
-            onOpenDetailCharacter = {},
-            navController = rememberNavController()
+            navController = rememberNavController(),
         )
     }
 }
