@@ -11,9 +11,7 @@ import kotlinx.coroutines.launch
 
 class MasterListViewModel : ViewModel() {
 
-    val charactersListUseCase = CharactersListUseCase()
-
-    //private val repository = CharacterService()
+    private val charactersListUseCase = CharactersListUseCase()
 
     private val _charactersList = MutableLiveData<List<CharacterData>>()
     val charactersList: LiveData<List<CharacterData>> = _charactersList
@@ -22,6 +20,8 @@ class MasterListViewModel : ViewModel() {
     var isLoading: LiveData<Boolean> = _isLoading
 
     private var currentPage = 1
+
+    //private var isFetching = false
 
     init {
         getCharactersList()
@@ -33,23 +33,24 @@ class MasterListViewModel : ViewModel() {
     }
 
     fun loadMoreCharacters() {
-        viewModelScope.launch {
+       // if (!isFetching) {
             currentPage++
             getCharactersList()
-        }
+        //}
     }
 
     private fun getCharactersList() {
         viewModelScope.launch {
+          //  isFetching = true
             _isLoading.value = true
             try {
-                //val response = repository.getCharactersList(currentPage)
                 val response = charactersListUseCase(currentPage)
                 val newList = _charactersList.value.orEmpty() + response.results
                 _charactersList.value = newList
             } catch (e: Exception) {
                 Log.e("characters", "Error al obtener personajes: ${e.message}")
             }
+          //  isFetching = false
             _isLoading.value = false
         }
     }

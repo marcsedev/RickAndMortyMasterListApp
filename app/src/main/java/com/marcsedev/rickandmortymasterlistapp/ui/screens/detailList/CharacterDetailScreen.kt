@@ -1,19 +1,15 @@
 package com.marcsedev.rickandmortymasterlistapp.ui.screens.detailList
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -35,14 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -136,11 +129,6 @@ fun CharacterDetailScreen(
                                     .padding(8.dp),
                             ) {
                                 Text(
-                                    text = id.toString(),
-                                    modifier = Modifier.align(CenterHorizontally),
-                                    fontSize = 16.sp
-                                )
-                                Text(
                                     text = character?.name ?: "_name",
                                     modifier = Modifier.align(CenterHorizontally),
                                     fontSize = 16.sp
@@ -155,11 +143,45 @@ fun CharacterDetailScreen(
                                     modifier = Modifier.align(CenterHorizontally),
                                     fontSize = 16.sp
                                 )
-                                Text(
-                                    text = character?.gender ?: "_gender",
+
+                                Row(
                                     modifier = Modifier.align(CenterHorizontally),
-                                    fontSize = 16.sp
-                                )
+                                ) {
+                                    when (character?.gender) {
+                                        "Female" -> {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.female_24px),
+                                                contentDescription = "",
+                                                tint = Color.Magenta,
+                                                modifier = Modifier.size(14.dp)
+                                            )
+                                        }
+
+                                        "Male" -> {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.male_24px),
+                                                contentDescription = "",
+                                                tint = Color.Blue,
+                                                modifier = Modifier.size(14.dp)
+
+                                            )
+                                        }
+
+                                        else -> {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.unknown_24px),
+                                                contentDescription = "",
+                                                tint = Color.Gray,
+                                                modifier = Modifier.size(14.dp)
+
+                                            )
+                                        }
+                                    }
+                                    Text(
+                                        text = character?.gender ?: "_gender",
+                                        fontSize = 16.sp
+                                    )
+                                }
                             }
                         }
                     }
