@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "RickAndMortyMasterListApp"
 include(":app")
-include(":app:common")
