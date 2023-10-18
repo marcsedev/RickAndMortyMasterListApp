@@ -1,5 +1,6 @@
 package com.marcsedev.rickandmortymasterlistapp.navigation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -13,10 +14,12 @@ import com.marcsedev.rickandmortymasterlistapp.ui.screens.masterList.MasterListS
 import com.marcsedev.rickandmortymasterlistapp.ui.screens.masterList.MasterListViewModel
 import com.marcsedev.rickandmortymasterlistapp.ui.screens.splashScreen.SplashScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val characterDetailViewModel: CharacterDetailViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = AppScreens.SplashScreen.route
