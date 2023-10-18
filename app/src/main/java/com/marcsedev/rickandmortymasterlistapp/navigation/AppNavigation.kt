@@ -7,10 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.marcsedev.rickandmortymasterlistapp.ui.screens.list.detailList.CharacterDetailScreen
-import com.marcsedev.rickandmortymasterlistapp.ui.screens.list.detailList.CharacterDetailViewModel
-import com.marcsedev.rickandmortymasterlistapp.ui.screens.list.masterList.MasterListScreen
-import com.marcsedev.rickandmortymasterlistapp.ui.screens.list.masterList.MasterListViewModel
+import com.marcsedev.rickandmortymasterlistapp.ui.screens.detailList.CharacterDetailScreen
+import com.marcsedev.rickandmortymasterlistapp.ui.screens.detailList.CharacterDetailViewModel
+import com.marcsedev.rickandmortymasterlistapp.ui.screens.masterList.MasterListScreen
+import com.marcsedev.rickandmortymasterlistapp.ui.screens.masterList.MasterListViewModel
 import com.marcsedev.rickandmortymasterlistapp.ui.screens.splashScreen.SplashScreen
 
 @Composable

@@ -1,12 +1,12 @@
-package com.marcsedev.rickandmortymasterlistapp.data.respository
+package com.marcsedev.rickandmortymasterlistapp.data.network
 
-import com.marcsedev.rickandmortymasterlistapp.data.network.model.characters.CharacterData
-import com.marcsedev.rickandmortymasterlistapp.data.network.model.response.CharacterResponse
+import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
+import com.marcsedev.rickandmortymasterlistapp.data.model.response.CharacterResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface CharacterService {
+interface CharacterClient {
     // Get all characters
     @GET("character")
     suspend fun getCharactersList(

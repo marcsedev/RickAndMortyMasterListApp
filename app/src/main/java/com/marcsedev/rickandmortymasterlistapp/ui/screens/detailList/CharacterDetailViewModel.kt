@@ -1,16 +1,16 @@
-package com.marcsedev.rickandmortymasterlistapp.ui.screens.list.detailList
+package com.marcsedev.rickandmortymasterlistapp.ui.screens.detailList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.marcsedev.rickandmortymasterlistapp.data.network.model.characters.CharacterData
-import com.marcsedev.rickandmortymasterlistapp.data.respository.CharacterRepository
+import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
+import com.marcsedev.rickandmortymasterlistapp.data.network.CharacterService
 import kotlinx.coroutines.launch
 
 class CharacterDetailViewModel : ViewModel() {
 
-    private val repository = CharacterRepository()
+    private val repository = CharacterService()
 
     private val _character = MutableLiveData<CharacterData>()
     val character: LiveData<CharacterData> = _character
