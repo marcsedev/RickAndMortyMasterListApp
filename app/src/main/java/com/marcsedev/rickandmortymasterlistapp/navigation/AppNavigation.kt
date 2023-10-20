@@ -1,6 +1,5 @@
 package com.marcsedev.rickandmortymasterlistapp.navigation
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -27,7 +26,7 @@ fun AppNavigation(masterListViewModel: MasterListViewModel) {
             SplashScreen(navController)
         }
         composable(route = AppScreens.MasterListScreen.route) {
-            MasterListScreen(masterListViewModel, {}, navController)
+            MasterListScreen(masterListViewModel, navController)
         }
         composable(
             route = AppScreens.CharacterDetailScreen.route + "/{id}",

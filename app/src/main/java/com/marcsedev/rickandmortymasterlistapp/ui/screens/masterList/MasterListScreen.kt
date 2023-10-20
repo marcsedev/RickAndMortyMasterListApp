@@ -12,14 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Info
@@ -28,20 +24,15 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -55,20 +46,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.marcsedev.rickandmortymasterlistapp.R
+import com.marcsedev.rickandmortymasterlistapp.navigation.AppScreens
 import com.marcsedev.rickandmortymasterlistapp.ui.components.CharacterItem
-import kotlinx.coroutines.CoroutineScope
+import com.marcsedev.rickandmortymasterlistapp.ui.components.MyBottomNavigationBar
+import com.marcsedev.rickandmortymasterlistapp.ui.components.MyFloatingActionButton
+import com.marcsedev.rickandmortymasterlistapp.ui.components.MyTopAppBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MasterListScreen(
     masterListViewModel: MasterListViewModel = viewModel(),
-    onOpenDetailCharacter: (Int) -> Unit,
     navController: NavController,
 ) {
 
@@ -85,6 +77,13 @@ fun MasterListScreen(
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
+    val rvState = rememberLazyGridState()
+    val showButton by remember {
+        derivedStateOf {
+            rvState.firstVisibleItemScrollOffset > 0
+        }
+    }
+
 
     val items = listOf(
         NavigationItem(
@@ -151,19 +150,25 @@ fun MasterListScreen(
             }
 
         },
-        drawerState = drawerState,
+        drawerState = drawerState
     ) {
         Scaffold(
             topBar = { MyTopAppBar(drawerState, coroutineScope) },
-            bottomBar = { MyBottomNavigation() }
+            bottomBar = { MyBottomNavigationBar() },
+            floatingActionButton = {
+                if (showButton) {
+                    MyFloatingActionButton {
+                        coroutineScope.launch {
+                            rvState.animateScrollToItem(0)
+                        }
+                    }
+                }
+            }
         ) { padding ->
-            /* if (isLoading) {
-                 Loading()
-             } else {*/
             Box(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Image(
+                androidx.compose.foundation.Image(
                     painter = painterResource(R.drawable.cielo_estrellado),
                     contentDescription = null,
                     contentScale = ContentScale.FillHeight,
@@ -172,21 +177,21 @@ fun MasterListScreen(
                     modifier = Modifier
                         .padding(top = padding.calculateTopPadding())
                         .padding(horizontal = 16.dp),
-                    horizontalAlignment = CenterHorizontally
+                    horizontalAlignment = CenterHorizontally,
                 ) {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
                         contentPadding = PaddingValues(8.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        state = rvState
                     ) {
                         itemsIndexed(charactersList) { index, character ->
                             CharacterItem(
                                 character = character,
                                 onOpenDetailCharacter = {
-                                    character.id
+                                    navController.navigate(route = AppScreens.CharacterDetailScreen.route + "/${character.id}")
                                 },
-                                navController = navController
                             )
                             if (index == charactersList.size - 1) {
                                 masterListViewModel.loadMoreCharacters()
@@ -198,91 +203,7 @@ fun MasterListScreen(
         }
     }
 }
-//}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyTopAppBar(drawerState: DrawerState, coroutineScope: CoroutineScope) {
-    TopAppBar(
-        title = {
-            Text(
-                text = "Character List",
-                color = Color.White,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = {
-                coroutineScope.launch {
-                    // Abre el cajón aquí
-                    drawerState.open()
-                }
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "",
-                    tint = Color.White,
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "",
-                    tint = Color.White,
-                )
-            }
-        },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = Color.Black
-        ),
-    )
-}
-
-@Composable
-fun MyBottomNavigation() {
-    var index by remember { mutableIntStateOf(0) }
-
-    NavigationBar(
-        containerColor = Color.Black
-    ) {
-        NavigationBarItem(
-            selected = index == 0,
-            label = {
-                Text(
-                    text = "Characters",
-                    color = if (index == 0) Color.White else LocalContentColor.current
-                )
-            },
-            onClick = { index = 0 },
-            icon = { Icon(imageVector = Icons.Filled.Person, contentDescription = "") },
-        )
-        NavigationBarItem(
-            selected = index == 1,
-            label = {
-                Text(
-                    text = "Chapters",
-                    color = if (index == 1) Color.White else LocalContentColor.current
-                )
-            },
-            onClick = { index = 1 },
-            icon = { Icon(imageVector = Icons.Filled.List, contentDescription = "") },
-        )
-        NavigationBarItem(
-            selected = index == 2,
-            label = {
-                Text(
-                    text = "Favorites",
-                    color = if (index == 2) Color.White else LocalContentColor.current
-                )
-            },
-            onClick = { index = 2 },
-            icon = { Icon(imageVector = Icons.Filled.Favorite, contentDescription = "") },
-        )
-    }
-}
 /*
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
