@@ -1,25 +1,24 @@
 package com.marcsedev.rickandmortymasterlistapp.data.network
 
-import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
+import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterDetailData
 import com.marcsedev.rickandmortymasterlistapp.data.model.response.CharacterResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class CharacterService {
-
-    //private val characterService = RetrofitInstance.characterClient
-    private val characterService = RetrofitHelper.getRetrofit()
+class CharacterService @Inject constructor(
+private val characterClient: CharacterClient
+) {
 
     suspend fun getCharactersList(page: Int): CharacterResponse {
         return withContext(Dispatchers.IO) {
-            //characterService.getCharactersList(page)
-            characterService.create(CharacterClient::class.java).getCharactersList(page)
+            characterClient.getCharactersList(page)
         }
     }
 
-    suspend fun getCharacter(id: Int): CharacterData {
+    suspend fun getCharacterById(id: Int): CharacterDetailData {
         return withContext(Dispatchers.IO) {
-            characterService.create(CharacterClient::class.java).getCharacter(id)
+            characterClient.getCharacterById(id)
         }
     }
 }

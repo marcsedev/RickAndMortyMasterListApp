@@ -4,16 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
-import com.marcsedev.rickandmortymasterlistapp.data.network.CharacterService
+import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterDetailData
+import com.marcsedev.rickandmortymasterlistapp.data.respository.CharacterRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CharacterDetailViewModel : ViewModel() {
+@HiltViewModel
 
-    private val repository = CharacterService()
+class CharacterDetailViewModel @Inject constructor(
+    private val repository: CharacterRepository
+) : ViewModel() {
 
-    private val _character = MutableLiveData<CharacterData>()
-    val character: LiveData<CharacterData> = _character
+    private val _character = MutableLiveData<CharacterDetailData>()
+    val character: LiveData<CharacterDetailData> = _character
 
     private val _characterId = MutableLiveData<Int>()
     val characterId: LiveData<Int> = _characterId
@@ -25,7 +29,7 @@ class CharacterDetailViewModel : ViewModel() {
     fun getCharacterById(id: Int) {
         viewModelScope.launch {
             try {
-                val character = repository.getCharacter(id)
+                val character = repository.getCharacterById(id)
                 _character.value = character
             } catch (e: Exception) {
                 // Handle error

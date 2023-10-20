@@ -5,16 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
+import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterDetailData
 import com.marcsedev.rickandmortymasterlistapp.domain.CharactersListUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MasterListViewModel : ViewModel() {
+@HiltViewModel
+class MasterListViewModel @Inject constructor(
+    private val charactersListUseCase: CharactersListUseCase
+) : ViewModel() {
 
-    private val charactersListUseCase = CharactersListUseCase()
-
-    private val _charactersList = MutableLiveData<List<CharacterData>>()
-    val charactersList: LiveData<List<CharacterData>> = _charactersList
+    private val _charactersList = MutableLiveData<List<CharacterDetailData>>()
+    val charactersList: LiveData<List<CharacterDetailData>> = _charactersList
 
     private val _isLoading = MutableLiveData<Boolean>()
     var isLoading: LiveData<Boolean> = _isLoading
@@ -27,21 +30,21 @@ class MasterListViewModel : ViewModel() {
         getCharactersList()
     }
 
-    fun setCharactersList(characterList: List<CharacterData>) {
+    fun setCharactersList(characterList: List<CharacterDetailData>) {
         _isLoading.value = false
         _charactersList.value = characterList
     }
 
     fun loadMoreCharacters() {
-       // if (!isFetching) {
-            currentPage++
-            getCharactersList()
+        // if (!isFetching) {
+        currentPage++
+        getCharactersList()
         //}
     }
 
     private fun getCharactersList() {
         viewModelScope.launch {
-          //  isFetching = true
+            //  isFetching = true
             _isLoading.value = true
             try {
                 val response = charactersListUseCase(currentPage)
@@ -50,7 +53,7 @@ class MasterListViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.e("characters", "Error al obtener personajes: ${e.message}")
             }
-          //  isFetching = false
+            //  isFetching = false
             _isLoading.value = false
         }
     }

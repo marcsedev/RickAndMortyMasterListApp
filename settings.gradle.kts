@@ -1,7 +1,8 @@
 pluginManagement {
     repositories {
         google()
-        mavenCentral()
+        mavenCentral { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+
         gradlePluginPortal()
     }
 }
@@ -13,6 +14,9 @@ dependencyResolutionManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+}
+
 rootProject.name = "RickAndMortyMasterListApp"
 include(":app")
-include(":app:common")

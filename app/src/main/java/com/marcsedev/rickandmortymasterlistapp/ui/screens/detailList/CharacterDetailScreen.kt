@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -25,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,15 +31,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.marcsedev.rickandmortymasterlistapp.R
-import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -153,7 +148,6 @@ fun CharacterDetailScreen(
                                                 painter = painterResource(id = R.drawable.female_24px),
                                                 contentDescription = "",
                                                 tint = Color.Magenta,
-                                                modifier = Modifier.size(14.dp)
                                             )
                                         }
 
@@ -162,7 +156,6 @@ fun CharacterDetailScreen(
                                                 painter = painterResource(id = R.drawable.male_24px),
                                                 contentDescription = "",
                                                 tint = Color.Blue,
-                                                modifier = Modifier.size(14.dp)
 
                                             )
                                         }
@@ -172,7 +165,6 @@ fun CharacterDetailScreen(
                                                 painter = painterResource(id = R.drawable.unknown_24px),
                                                 contentDescription = "",
                                                 tint = Color.Gray,
-                                                modifier = Modifier.size(14.dp)
 
                                             )
                                         }
@@ -190,7 +182,7 @@ fun CharacterDetailScreen(
         }
     }
 }
-
+/*
 @Preview
 @Composable
 fun CharacterDetailScreenPreview() {
@@ -202,4 +194,4 @@ fun CharacterDetailScreenPreview() {
             id = 2
         )
     }
-}
+}*/

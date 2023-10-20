@@ -30,26 +30,25 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.marcsedev.rickandmortymasterlistapp.R
-import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
-import com.marcsedev.rickandmortymasterlistapp.navigation.AppScreens
+import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterDetailData
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
 @Composable
 fun CharacterItem(
-    character: CharacterData,
-    onOpenDetailCharacter: (id: Int) -> Unit,
-    navController: NavController
+    character: CharacterDetailData,
+    //id: Int,
+    onOpenDetailCharacter: () -> Unit,
+    //navController: NavController
 ) {
     Box(
         modifier = Modifier
             .size(180.dp, 210.dp)
             .border(1.dp, Color.Transparent, shape = RoundedCornerShape(16.dp))
             .clickable {
-                navController.navigate(route = AppScreens.CharacterDetailScreen.route + "/${character.id}")
+            onOpenDetailCharacter()
+            //navController.navigate(route = AppScreens.CharacterDetailScreen.route + "/${character.id}")
             }
     ) {
         Column(
@@ -157,7 +156,7 @@ fun CharacterItem(
 fun CharacterItemListPreview() {
     RickAndMortyMasterListAppTheme {
         CharacterItem(
-            character = CharacterData(
+            character = CharacterDetailData(
                 id = 1,
                 name = "Rick Sanchez",
                 status = "Alive",
@@ -172,7 +171,7 @@ fun CharacterItemListPreview() {
                 created = "2021-10-09T12:00:00Z"
             ),
             onOpenDetailCharacter = {},
-            navController = rememberNavController()
+            //navController = rememberNavController()
         )
     }
 }
