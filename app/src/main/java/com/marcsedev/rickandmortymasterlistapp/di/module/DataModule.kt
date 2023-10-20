@@ -1,30 +1,48 @@
 package com.marcsedev.rickandmortymasterlistapp.di.module
 
-/*
+import com.marcsedev.rickandmortymasterlistapp.data.network.CharacterClient
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
+
+
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object DataModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(gson: Gson) : Retrofit = Retrofit.Builder()
-        .baseUrl("https://rickandmortyapi.com/api/")
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .build()
+    fun provideRetrofit(/*gson: Gson*/): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://rickandmortyapi.com/api/")
+            .addConverterFactory(GsonConverterFactory.create(/*gson*/))
+            .build()
+    }
 
+    @Singleton
     @Provides
+    fun provideCharacterClient(retrofit: Retrofit): CharacterClient {
+        return retrofit.create(CharacterClient::class.java)
+    }
+}
+
+   /* @Provides
     fun provideGson(): Gson = GsonBuilder().create()
 
-    @Provides
-    fun provideCharacterService(retrofit: Retrofit): CharacterService = retrofit.create(CharacterService::class.java)
 
     @Singleton
     @Provides
-    fun provideCharacterRemoteDataSource(characterService: CharacterService) = CharacterRemoteDataSource(characterService)
+    fun provideCharacterRemoteDataSource(characterService: CharacterService) =
+        CharacterRemoteDataSource(characterService)
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext appContext: Context) = AppDatabase.getDatabase(appContext)
+    fun provideDatabase(@ApplicationContext appContext: Context) =
+        AppDatabase.getDatabase(appContext)
 
     @Singleton
     @Provides
@@ -32,7 +50,8 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideRepository(remoteDataSource: CharacterRemoteDataSource,
-                          localDataSource: CharacterDao) =
-        CharacterRepository(remoteDataSource, localDataSource)
-}*/
+    fun provideRepository(
+        remoteDataSource: CharacterRemoteDataSource,
+        localDataSource: CharacterDao
+    ) =
+        CharacterRepository(remoteDataSource, localDataSource)*/

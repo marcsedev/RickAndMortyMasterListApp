@@ -1,6 +1,6 @@
 package com.marcsedev.rickandmortymasterlistapp.data.model.characters
 
-data class CharacterData(
+data class CharacterDetailData(
     val id: Int,
     val name: String,
     val status: String,

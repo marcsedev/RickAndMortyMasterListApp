@@ -34,13 +34,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.marcsedev.rickandmortymasterlistapp.R
-import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
+import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterDetailData
 import com.marcsedev.rickandmortymasterlistapp.navigation.AppScreens
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
 @Composable
 fun CharacterItem(
-    character: CharacterData,
+    character: CharacterDetailData,
     onOpenDetailCharacter: (id: Int) -> Unit,
     navController: NavController
 ) {
@@ -157,7 +157,7 @@ fun CharacterItem(
 fun CharacterItemListPreview() {
     RickAndMortyMasterListAppTheme {
         CharacterItem(
-            character = CharacterData(
+            character = CharacterDetailData(
                 id = 1,
                 name = "Rick Sanchez",
                 status = "Alive",

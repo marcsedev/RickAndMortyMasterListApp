@@ -1,7 +1,6 @@
 package com.marcsedev.rickandmortymasterlistapp.ui.screens.masterList
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,15 +55,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.marcsedev.rickandmortymasterlistapp.R
-import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
 import com.marcsedev.rickandmortymasterlistapp.ui.components.CharacterItem
-import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -111,9 +107,7 @@ fun MasterListScreen(
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
-                Column(
-                    modifier = Modifier.background(Color.DarkGray)
-                ) {
+                Column {
                     Spacer(modifier = Modifier.height(16.dp))
                     Image(
                         painter = painterResource(id = R.drawable.rick_morty_title),
@@ -143,6 +137,7 @@ fun MasterListScreen(
                             },
                             modifier = Modifier
                                 .padding(NavigationDrawerItemDefaults.ItemPadding)
+
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
@@ -212,7 +207,9 @@ fun MyTopAppBar(drawerState: DrawerState, coroutineScope: CoroutineScope) {
         title = {
             Text(
                 text = "Character List",
-                color = Color.White
+                color = Color.White,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
         },
         navigationIcon = {
@@ -225,7 +222,7 @@ fun MyTopAppBar(drawerState: DrawerState, coroutineScope: CoroutineScope) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = "",
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         },
@@ -234,7 +231,7 @@ fun MyTopAppBar(drawerState: DrawerState, coroutineScope: CoroutineScope) {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "",
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         },
@@ -286,7 +283,7 @@ fun MyBottomNavigation() {
         )
     }
 }
-
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
@@ -353,14 +350,14 @@ fun MasterListScreenPreview() {
         )
         MasterListScreen(
             masterListViewModel = remember {
-                MasterListViewModel().apply {
+                MasterListViewModel(CharactersListUseCase()).apply {
                     setCharactersList(
                         sampleCharacters
                     )
                 }
             },
             onOpenDetailCharacter = {},
-            navController = rememberNavController(),
+            //navController = rememberNavController(),
         )
     }
-}
+}*/

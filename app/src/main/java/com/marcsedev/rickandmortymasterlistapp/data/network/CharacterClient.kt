@@ -1,6 +1,6 @@
 package com.marcsedev.rickandmortymasterlistapp.data.network
 
-import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterData
+import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterDetailData
 import com.marcsedev.rickandmortymasterlistapp.data.model.response.CharacterResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,7 +15,7 @@ interface CharacterClient {
 
     // Get a single character
     @GET("character/{id}")
-    suspend fun getCharacter(
+    suspend fun getCharacterById(
         @Path("id") id: Int
-    ): CharacterData
+    ): CharacterDetailData
 }
