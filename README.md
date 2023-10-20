@@ -13,7 +13,7 @@ Welcome to the Rick and Morty Master List App! This is a beta version of the app
 
 We have a roadmap of exciting features planned for future releases. Stay tuned for updates!
 
-- **Dependency Injection**: We're in the process of integrating Hilt for better dependency management.
+- ~~**Dependency Injection**~~: We're in the process of integrating Hilt for better dependency management.
 
 - ~~**Splash Screen**~~: A visually appealing splash screen is on the way to enhance the app's startup experience.
 
