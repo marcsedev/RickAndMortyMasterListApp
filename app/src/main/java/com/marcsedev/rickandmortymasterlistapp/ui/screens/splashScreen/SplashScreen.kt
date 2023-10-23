@@ -20,14 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.marcsedev.rickandmortymasterlistapp.R
-import com.marcsedev.rickandmortymasterlistapp.navigation.AppScreens
+import com.marcsedev.rickandmortymasterlistapp.navigation.Routes
 import com.marcsedev.rickandmortymasterlistapp.ui.theme.RickAndMortyMasterListAppTheme
 
 @Composable
 fun SplashScreen(navController: NavHostController) {
     LaunchedEffect(key1 = true) {
         navController.popBackStack()
-        navController.navigate(AppScreens.MasterListScreen.route)
+        navController.navigate(Routes.MasterListScreen.route)
     }
     Splash()
 }

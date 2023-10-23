@@ -20,24 +20,26 @@ fun AppNavigation(masterListViewModel: MasterListViewModel) {
 
     NavHost(
         navController = navController,
-        startDestination = AppScreens.SplashScreen.route
+        startDestination = Routes.SplashScreen.route
     ) {
-        composable(route = AppScreens.SplashScreen.route) {
-            SplashScreen(navController)
-        }
-        composable(route = AppScreens.MasterListScreen.route) {
-            MasterListScreen(masterListViewModel, navController)
+        composable(route = Routes.SplashScreen.route) { SplashScreen(navController) }
+        composable(route = Routes.MasterListScreen.route) {
+            MasterListScreen(
+                masterListViewModel,
+                navController
+            )
         }
         composable(
-            route = AppScreens.CharacterDetailScreen.route + "/{id}",
+            route = Routes.CharacterDetailScreen.route,
             arguments = listOf(navArgument("id") {
                 type = NavType.IntType
             })
         ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id")
-            id?.let {
-                CharacterDetailScreen(characterDetailViewModel, navController, id)
-            }
+            CharacterDetailScreen(
+                characterDetailViewModel,
+                navController,
+                backStackEntry.arguments?.getInt("id") ?: 0
+            )
         }
     }
 }
