@@ -32,9 +32,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.marcsedev.rickandmortymasterlistapp.R
-import com.marcsedev.rickandmortymasterlistapp.navigation.AppScreens
+import com.marcsedev.rickandmortymasterlistapp.navigation.Routes
 import com.marcsedev.rickandmortymasterlistapp.ui.components.CharacterItem
 import com.marcsedev.rickandmortymasterlistapp.ui.components.MyBottomNavigationBar
 import com.marcsedev.rickandmortymasterlistapp.ui.components.MyFloatingActionButton
@@ -70,8 +70,8 @@ fun MasterListScreen(
         val unselectedIcon: ImageVector,
     )
 
-    val charactersList by masterListViewModel.charactersList.observeAsState(emptyList())
-    val isLoading by masterListViewModel.isLoading.observeAsState(false)
+    val charactersList by masterListViewModel.charactersList.collectAsState(emptyList())
+    val isLoading by masterListViewModel.isLoading.collectAsState(false)
     val coroutineScope = rememberCoroutineScope()
     val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var selectedItemIndex by rememberSaveable {
@@ -111,7 +111,9 @@ fun MasterListScreen(
                     Image(
                         painter = painterResource(id = R.drawable.rick_morty_title),
                         contentDescription = "_title",
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier
+                            .padding(36.dp)
+                            .align(CenterHorizontally)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     items.forEachIndexed { index, item ->
@@ -190,7 +192,7 @@ fun MasterListScreen(
                             CharacterItem(
                                 character = character,
                                 onOpenDetailCharacter = {
-                                    navController.navigate(route = AppScreens.CharacterDetailScreen.route + "/${character.id}")
+                                    navController.navigate(route = Routes.CharacterDetailScreen.createRoute(character.id))
                                 },
                             )
                             if (index == charactersList.size - 1) {

@@ -1,13 +1,13 @@
 package com.marcsedev.rickandmortymasterlistapp.ui.screens.masterList
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.marcsedev.rickandmortymasterlistapp.data.model.characters.CharacterDetailData
 import com.marcsedev.rickandmortymasterlistapp.domain.CharactersListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,11 +16,11 @@ class MasterListViewModel @Inject constructor(
     private val charactersListUseCase: CharactersListUseCase
 ) : ViewModel() {
 
-    private val _charactersList = MutableLiveData<List<CharacterDetailData>>()
-    val charactersList: LiveData<List<CharacterDetailData>> = _charactersList
+    private val _charactersList = MutableStateFlow<List<CharacterDetailData>>(emptyList())
+    val charactersList = _charactersList.asStateFlow()
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    var isLoading: LiveData<Boolean> = _isLoading
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    var isLoading = _isLoading.asStateFlow()
 
     private var currentPage = 1
 
