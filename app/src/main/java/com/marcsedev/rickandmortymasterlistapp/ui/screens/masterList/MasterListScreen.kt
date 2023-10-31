@@ -192,7 +192,7 @@ fun MasterListScreen(
                             CharacterItem(
                                 character = character,
                                 onOpenDetailCharacter = {
-                                    navController.navigate(route = Routes.CharacterDetailScreen.createRoute(character.id))
+                                    navController.navigate(route = Routes.CharacterDetailScreen.route + "/${character.id}")
                                 },
                             )
                             if (index == charactersList.size - 1) {
