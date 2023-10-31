@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    //Update navigation
                     AppNavigation(masterListViewModel)
                     //MasterListScreen(onOpenDetailCharacter = {}, masterListViewModel = masterListViewModel )
                     //CharacterDetailScreen(/*navController = ,*/ id = 2)
