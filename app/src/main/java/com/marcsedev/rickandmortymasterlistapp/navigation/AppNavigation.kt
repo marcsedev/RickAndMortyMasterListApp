@@ -30,16 +30,15 @@ fun AppNavigation(masterListViewModel: MasterListViewModel) {
             )
         }
         composable(
-            route = Routes.CharacterDetailScreen.route,
+            route = Routes.CharacterDetailScreen.route + "/{id}",
             arguments = listOf(navArgument("id") {
                 type = NavType.IntType
             })
         ) { backStackEntry ->
-            CharacterDetailScreen(
-                characterDetailViewModel,
-                navController,
-                backStackEntry.arguments?.getInt("id") ?: 0
-            )
+            val id = backStackEntry.arguments?.getInt("id")
+            id?.let {
+                CharacterDetailScreen(characterDetailViewModel, navController, id)
+            }
         }
     }
 }
